@@ -1,4 +1,5 @@
 import { Gameboard } from './components/Gameboard';
+import { TelegramUser } from './components/TelegramUser';
 import { useGameStore, useGameActions } from './stores/game-store';
 import './App.css';
 
@@ -10,6 +11,7 @@ function App() {
     <div className="app-container">
       <header>
         <h1>Balatro Clone</h1>
+        <TelegramUser />
       </header>
       <main>
         <Gameboard
