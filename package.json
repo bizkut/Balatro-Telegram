@@ -1,0 +1,25 @@
+{
+  "name": "balatro-tma",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A multiplayer Balatro-like game for Telegram Mini Apps.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm --filter \"./apps/**\" dev",
+    "build": "pnpm --filter \"./packages/**\" build && pnpm --filter \"./apps/**\" build",
+    "test": "pnpm --filter \"./**/\" test",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0"
+  },
+  "keywords": [
+    "balatro",
+    "telegram",
+    "mini-app",
+    "react",
+    "node"
+  ],
+  "author": "Jules",
+  "license": "MIT"
+}
