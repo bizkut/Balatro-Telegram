@@ -1,11 +1,8 @@
 # Stage 1: Build the application
-FROM node:18-alpine as builder
+FROM node:20-alpine as builder
 
 # Set the working directory to the root of the monorepo
 WORKDIR /usr/src/app
-
-# Update npm to the latest version to support workspaces
-RUN npm install -g npm@latest
 
 # Copy all package.json files to leverage Docker cache
 COPY package.json ./

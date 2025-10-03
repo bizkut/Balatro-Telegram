@@ -1,9 +1,16 @@
 version: '3.8'
+
+networks:
+  balatro-net:
+    driver: bridge
+
 services:
   frontend:
     build:
       context: .
       dockerfile: ./packages/frontend/Dockerfile
+    networks:
+      - balatro-net
     # The frontend is now exposed via Cloudflare Tunnel, not a host port.
 
   backend:
@@ -17,11 +24,15 @@ services:
       - postgres
     env_file:
       - .env
+    networks:
+      - balatro-net
 
   redis:
     image: "redis:alpine"
     ports:
       - "6379:6379"
+    networks:
+      - balatro-net
 
   postgres:
     image: "postgres:15-alpine"
@@ -31,15 +42,19 @@ services:
       - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - balatro-net
 
   cloudflared:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
-    command: tunnel run
+    command: tunnel --url http://frontend:80
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
     depends_on:
       - frontend
+    networks:
+      - balatro-net
 
 volumes:
   postgres_data:

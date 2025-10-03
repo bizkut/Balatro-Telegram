@@ -1,11 +1,8 @@
-# Base image
-FROM node:18-alpine
+# Base image with a compatible Node.js version
+FROM node:20-alpine
 
 # Set the working directory to the root of the monorepo
 WORKDIR /usr/src/app
-
-# Update npm to the latest version to support workspaces
-RUN npm install -g npm@latest
 
 # Copy all package.json files to leverage Docker cache
 COPY package.json ./
