@@ -1,0 +1,51 @@
+.card {
+  width: 80px;
+  height: 120px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.card.selected {
+  transform: translateY(-10px);
+  border-color: #007bff;
+  box-shadow: 0 0 10px #007bff;
+}
+
+.rank {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.top-left {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+}
+
+.bottom-right {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  transform: rotate(180deg);
+}
+
+.suit {
+  font-size: 2.5em;
+  text-align: center;
+  align-self: center;
+}
