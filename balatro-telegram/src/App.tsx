@@ -4,13 +4,19 @@ import Hand from './components/Hand';
 import './App.css';
 
 const Game: React.FC = () => {
-    const { dispatch } = useGame();
+    const { socket } = useGame();
+
+    const handleDrawHand = () => {
+        if (socket) {
+            socket.emit('draw_hand');
+        }
+    };
 
     return (
         <div className="App">
             <header className="App-header">
                 <h1>Balatro on Telegram</h1>
-                <button onClick={() => dispatch({ type: 'DRAW_HAND' })}>Draw Hand</button>
+                <button onClick={handleDrawHand}>Draw Hand</button>
             </header>
             <main>
                 <Hand />

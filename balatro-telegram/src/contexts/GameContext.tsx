@@ -1,42 +1,22 @@
-import React, { createContext, useReducer, useContext, ReactNode } from 'react';
+import React, { createContext, useReducer, useContext, ReactNode, useEffect, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
 import { GameState, initialGameState, CardData } from '../data/game-state';
 
-type Action =
-    | { type: 'PLAY_HAND'; payload: CardData[] }
-    | { type: 'DISCARD_HAND'; payload: CardData[] }
-    | { type: 'DRAW_HAND' };
+// The server now dictates the state, so the primary action is to set it.
+type Action = { type: 'SET_GAME_STATE'; payload: GameState };
 
 const GameContext = createContext<{
     state: GameState;
-    dispatch: React.Dispatch<Action>;
+    socket: Socket | null;
 }>({
     state: initialGameState,
-    dispatch: () => null,
+    socket: null,
 });
 
 const gameReducer = (state: GameState, action: Action): GameState => {
     switch (action.type) {
-        case 'PLAY_HAND':
-            // Basic logic to remove cards from hand. Scoring will be added later.
-            return {
-                ...state,
-                hand: state.hand.filter(card => !action.payload.includes(card)),
-                hands: state.hands - 1,
-            };
-        case 'DISCARD_HAND':
-            return {
-                ...state,
-                hand: state.hand.filter(card => !action.payload.includes(card)),
-                discards: state.discards - 1,
-            };
-        case 'DRAW_HAND':
-            const newHand = state.deck.slice(0, 8);
-            const newDeck = state.deck.slice(8);
-            return {
-                ...state,
-                hand: newHand,
-                deck: newDeck,
-            };
+        case 'SET_GAME_STATE':
+            return action.payload;
         default:
             return state;
     }
@@ -44,9 +24,27 @@ const gameReducer = (state: GameState, action: Action): GameState => {
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
     const [state, dispatch] = useReducer(gameReducer, initialGameState);
+    const socketRef = useRef<Socket | null>(null);
+
+    useEffect(() => {
+        // Establish connection
+        socketRef.current = io("http://localhost:3001");
+
+        // Listen for game state updates
+        socketRef.current.on('game_state_update', (newGameState: GameState) => {
+            dispatch({ type: 'SET_GAME_STATE', payload: newGameState });
+        });
+
+        // Clean up on unmount
+        return () => {
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+            }
+        };
+    }, []); // Runs once on component mount
 
     return (
-        <GameContext.Provider value={{ state, dispatch }}>
+        <GameContext.Provider value={{ state, socket: socketRef.current }}>
             {children}
         </GameContext.Provider>
     );
