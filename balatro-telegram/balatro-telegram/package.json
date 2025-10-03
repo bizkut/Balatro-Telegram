@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "pixi.js": "^8.13.2",
-    "socket.io-client": "^4.8.1"
-  }
-}
