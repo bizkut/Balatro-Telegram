@@ -2,13 +2,15 @@ version: '3.8'
 services:
   frontend:
     build:
-      context: ./packages/frontend
+      context: .
+      dockerfile: ./packages/frontend/Dockerfile
     ports:
       - "80:80"
 
   backend:
     build:
-      context: ./packages/backend
+      context: .
+      dockerfile: ./packages/backend/Dockerfile
     ports:
       - "8080:8080"
     depends_on:

@@ -1,20 +1,30 @@
 # Base image
 FROM node:18-alpine
 
-# Create app directory
+# Set the working directory to the root of the monorepo
 WORKDIR /usr/src/app
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+# Update npm to the latest version to support workspaces
+RUN npm install -g npm@latest
 
-# Install app dependencies
+# Copy all package.json files to leverage Docker cache
+COPY package.json ./
+COPY packages/core/package.json ./packages/core/
+COPY packages/frontend/package.json ./packages/frontend/
+COPY packages/backend/package.json ./packages/backend/
+COPY packages/bot/package.json ./packages/bot/
+
+# Install all dependencies for all workspaces
 RUN npm install
 
-# Copy app source
+# Copy the rest of the source code
 COPY . .
 
-# Build the TypeScript source
+# Build all TypeScript sources for all workspaces
 RUN npm run build
+
+# Set the working directory to the backend package for the final command
+WORKDIR /usr/src/app/packages/backend
 
 # Expose the port the app runs on
 EXPOSE 8080
