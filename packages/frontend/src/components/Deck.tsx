@@ -11,7 +11,7 @@ export function Deck({ cardCount, onDraw }: DeckProps) {
       <h2>Deck</h2>
       <div className="deck" onClick={onDraw}>
         <div className="card-back">
-          <div className="card-back-inner">B</div>
+          {/* The card back is now rendered via the CSS background-image */}
         </div>
         <div className="deck-count">{cardCount} cards left</div>
       </div>

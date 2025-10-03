@@ -1,10 +1,11 @@
 import type { Suit, Rank, Enhancement, Edition, Seal, BaseCard } from '../types';
 import { nanoid } from 'nanoid';
 
-export class Card {
+export class Card implements BaseCard {
   public id: string;
   public suit: Suit;
   public rank: Rank;
+  public spriteSheet: { x: number; y: number };
   public enhancement?: Enhancement;
   public edition?: Edition;
   public seal?: Seal;
@@ -13,6 +14,7 @@ export class Card {
     this.id = id ?? nanoid();
     this.suit = baseCard.suit;
     this.rank = baseCard.rank;
+    this.spriteSheet = baseCard.spriteSheet;
   }
 
   public get value(): number {

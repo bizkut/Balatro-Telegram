@@ -7,13 +7,6 @@ interface CardProps {
   onClick?: (id: string) => void;
 }
 
-const suitToSymbol: Record<CardType['suit'], string> = {
-  Hearts: '♥',
-  Diamonds: '♦',
-  Clubs: '♣',
-  Spades: '♠',
-};
-
 export function Card({ card, isSelected, onClick }: CardProps) {
   const handleClick = () => {
     if (onClick) {
@@ -21,17 +14,22 @@ export function Card({ card, isSelected, onClick }: CardProps) {
     }
   };
 
-  const suitColor = card.suit === 'Hearts' || card.suit === 'Diamonds' ? 'red' : 'black';
+  // The dimensions of a single card on the spritesheet
+  const CARD_WIDTH = 71;
+  const CARD_HEIGHT = 95;
+
+  const style = {
+    '--sprite-x': `${-card.spriteSheet.x * CARD_WIDTH}px`,
+    '--sprite-y': `${-card.spriteSheet.y * CARD_HEIGHT}px`,
+  } as React.CSSProperties;
 
   return (
     <div
       className={`card ${isSelected ? 'selected' : ''}`}
       onClick={handleClick}
-      style={{ color: suitColor }}
+      style={style}
     >
-      <div className="rank top-left">{card.rank}</div>
-      <div className="suit">{suitToSymbol[card.suit]}</div>
-      <div className="rank bottom-right">{card.rank}</div>
+      {/* The card face is now rendered via the CSS background-image */}
     </div>
   );
 }
