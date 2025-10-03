@@ -4,6 +4,9 @@ FROM node:20-alpine as builder
 # Set the working directory to the root of the monorepo
 WORKDIR /usr/src/app
 
+# Update npm to a compatible version that supports workspaces
+RUN npm install -g npm@10
+
 # Copy all package.json files to leverage Docker cache
 COPY package.json ./
 COPY packages/core/package.json ./packages/core/
